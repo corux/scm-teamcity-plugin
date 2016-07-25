@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin>
+
+  <information>
+    <author>Tobias Wallura</author>
+    <wiki>https://github.com/corux/scm-teamcity-plugin</wiki>
+  </information>
+
+  <conditions>
+    <min-version>${project.parent.version}</min-version>
+  </conditions>
+
+  <packages>
+    <package>de.corux.scm.plugins.teamcity</package>
+  </packages>
+
+  <resources>
+    <script>/scm/corux.teamcity.globalconfigpanel.js</script>
+    <script>/scm/corux.teamcity.configpanel.js</script>
+  </resources>
+
+</plugin>
