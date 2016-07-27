@@ -14,7 +14,14 @@
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>${project.artifactId}</name>
-  <description>Commit hook to trigger TeamCity builds.</description>
+  <description>This plugin will ping your TeamCity CI server when a new commit is pushed to SCM-Manager.</description>
+  <url>https://github.com/corux/scm-teamcity-plugin</url>
+  <scm>
+    <connection>scm:git:https://github.com/corux/scm-teamcity-plugin</connection>
+    <developerConnection>scm:git:https://github.com/corux/scm-teamcity-plugin</developerConnection>
+    <url>https://github.com/corux/scm-teamcity-plugin</url>
+    <tag>HEAD</tag>
+  </scm>
 
   <dependencies>
 
@@ -56,9 +63,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.3</version>
-        <configuration>
-          <tagNameFormat>v@{project.version}</tagNameFormat>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -87,11 +91,4 @@
     </repository>
 
   </repositories>
-  <url>https://github.com/corux/scm-teamcity-plugin</url>
-  <scm>
-    <connection>scm:git:https://github.com/corux/scm-teamcity-plugin</connection>
-    <developerConnection>scm:git:https://github.com/corux/scm-teamcity-plugin</developerConnection>
-    <url>https://github.com/corux/scm-teamcity-plugin</url>
-    <tag>HEAD</tag>
-  </scm>
 </project>

@@ -5,6 +5,7 @@
   <information>
     <author>Tobias Wallura</author>
     <wiki>https://github.com/corux/scm-teamcity-plugin</wiki>
+    <category>Continuous Integration</category>
   </information>
 
   <conditions>
