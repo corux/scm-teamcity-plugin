@@ -21,18 +21,10 @@ public class TeamCityConfiguration implements Validateable
     /** Repository property for the TeamCity password. */
     public static final String PROPERTY_TEAMCITY_PASSWORD = "teamcity.password";
 
-    /** The TeamCity url. */
     private String url;
-
-    /** The VCS root. */
     private String vcsRoot;
-
-    /** The username. */
     private String username;
-
-    /** The password. */
     private String password;
-
     private Repository repository;
 
     /**

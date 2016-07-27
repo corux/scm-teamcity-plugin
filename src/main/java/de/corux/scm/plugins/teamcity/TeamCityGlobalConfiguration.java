@@ -17,7 +17,6 @@ public class TeamCityGlobalConfiguration implements Validateable
 {
     @XmlElement(name = "use-repository-name-as-default")
     private boolean useRepositoryNameAsDefault = false;
-
     private String url;
     private String username;
     private String password;
