@@ -83,8 +83,7 @@ public class TeamCityClientTest
     {
         TeamCityContext context = mock(TeamCityContext.class);
         httpClient = mock(TestAdvancedHttpClient.class);
-        doCallRealMethod().when(httpClient).put(Matchers.anyString());
-        doCallRealMethod().when(httpClient).get(Matchers.anyString());
+        doCallRealMethod().when(httpClient).post(Matchers.anyString());
         doCallRealMethod().when(httpClient).request(Matchers.any(BaseHttpRequest.class));
         doCallRealMethod().when(httpClient).setResponse(Matchers.any(AdvancedHttpResponse.class));
         doCallRealMethod().when(httpClient).getRequest();

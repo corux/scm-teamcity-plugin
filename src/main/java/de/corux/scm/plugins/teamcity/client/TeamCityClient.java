@@ -71,7 +71,7 @@ public class TeamCityClient
         String url = new UrlBuilder(baseUrl)
                 .append(String.format("/app/rest/debug/vcsCheckingForChangesQueue?locator=vcsRoot:%s", vcsRoot))
                 .toString();
-        AdvancedHttpRequestWithBody request = client.put(url);
+        AdvancedHttpRequestWithBody request = client.post(url);
         request.basicAuth(username, password);
 
         // response
