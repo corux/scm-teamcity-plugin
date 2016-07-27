@@ -1,7 +1,9 @@
 package de.corux.scm.plugins.teamcity;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,11 +13,7 @@ import javax.inject.Provider;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 
-import de.corux.scm.plugins.teamcity.TeamCityContext;
-import de.corux.scm.plugins.teamcity.TeamCityGlobalConfiguration;
-import de.corux.scm.plugins.teamcity.TeamCityHook;
 import de.corux.scm.plugins.teamcity.client.TeamCityClient;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.RepositoryHookEvent;
@@ -57,21 +55,21 @@ public class TeamCityHookTest
         teamCityHook.onEvent(hookEventWithoutRepository);
 
         // assert
-        verify(context, times(0)).getTeamCityVcsRoot(Matchers.any(Repository.class));
-        verify(teamCityClient, times(0)).triggerCheckForChanges(Matchers.anyString());
+        verify(context, never()).getTeamCityVcsRoot(any(Repository.class));
+        verify(teamCityClient, never()).triggerCheckForChanges(anyString());
     }
 
     @Test
     public void testOnEventRepositoryNotLinkedToTeamCity() throws IOException
     {
         // arrange
-        when(context.getTeamCityVcsRoot(Matchers.any(Repository.class))).thenReturn(null);
+        when(context.getTeamCityVcsRoot(any(Repository.class))).thenReturn(null);
 
         // act
         teamCityHook.onEvent(hookEvent);
 
         // assert
-        verify(context, times(1)).getTeamCityVcsRoot(Matchers.eq(repository));
-        verify(teamCityClient, times(0)).triggerCheckForChanges(Matchers.anyString());
+        verify(context).getTeamCityVcsRoot(repository);
+        verify(teamCityClient, never()).triggerCheckForChanges(anyString());
     }
 }

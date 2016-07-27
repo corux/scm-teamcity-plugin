@@ -18,9 +18,6 @@ import sonia.scm.repository.RepositoryHookEvent;
 @Extension
 public class TeamCityHook extends PostReceiveRepositoryHook
 {
-    /**
-     * The logger for {@link TeamCityHook}.
-     */
     private static final Logger logger = LoggerFactory.getLogger(TeamCityHook.class);
 
     private final Provider<TeamCityClient> clientProvider;
@@ -41,6 +38,7 @@ public class TeamCityHook extends PostReceiveRepositoryHook
 
         if (repository != null)
         {
+            client.updateConfigFromRepository(context.getConfiguration(repository));
             String vcsRoot = context.getTeamCityVcsRoot(repository);
             String commonMsg = String.format("SCM repository: %s, TeamCity VCS root: %s", repository.getName(),
                     vcsRoot);

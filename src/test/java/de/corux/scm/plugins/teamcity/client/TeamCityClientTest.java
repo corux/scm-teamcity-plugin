@@ -13,6 +13,7 @@ import java.util.Iterator;
 import org.junit.Test;
 import org.mockito.Matchers;
 
+import de.corux.scm.plugins.teamcity.TeamCityConfiguration;
 import de.corux.scm.plugins.teamcity.TeamCityContext;
 import de.corux.scm.plugins.teamcity.TeamCityGlobalConfiguration;
 import sonia.scm.net.ahc.AdvancedHttpClient;
@@ -63,7 +64,22 @@ public class TeamCityClientTest
         }
     }
 
-    public void initMockTeamCityClient(boolean useToken) throws IOException
+    public void initMockTeamCityClient() throws IOException
+    {
+        String username = "test-username";
+        String password = "test-password";
+        TeamCityConfiguration repoConfiguration = new TeamCityConfiguration(url, "Test", username, password);
+
+        TeamCityGlobalConfiguration globalConfiguration = mock(TeamCityGlobalConfiguration.class);
+        when(globalConfiguration.getUrl()).thenReturn(url);
+
+        initMockTeamCityClient(repoConfiguration, globalConfiguration);
+        expectedRequest = new TestAdvancedHttpRequest(httpClient, null, url);
+        expectedRequest.basicAuth(username, password);
+    }
+
+    public void initMockTeamCityClient(TeamCityConfiguration repoConfiguration,
+            TeamCityGlobalConfiguration globalConfiguration) throws IOException
     {
         TeamCityContext context = mock(TeamCityContext.class);
         httpClient = mock(TestAdvancedHttpClient.class);
@@ -73,21 +89,17 @@ public class TeamCityClientTest
         doCallRealMethod().when(httpClient).setResponse(Matchers.any(AdvancedHttpResponse.class));
         doCallRealMethod().when(httpClient).getRequest();
 
-        TeamCityGlobalConfiguration configuration = mock(TeamCityGlobalConfiguration.class);
-        when(context.getGlobalConfiguration()).thenReturn(configuration);
-        when(configuration.getUrl()).thenReturn(url);
+        when(context.getGlobalConfiguration()).thenReturn(globalConfiguration);
 
         teamCityClient = new TeamCityClient(context, httpClient);
-        expectedRequest = new TestAdvancedHttpRequest(httpClient, null, url);
-        expectedRequest.basicAuth("test-username", "test-password");
-        teamCityClient.setCredentials("test-username", "test-password");
+        teamCityClient.updateConfigFromRepository(repoConfiguration);
     }
 
     @Test
     public void testIndexRepositoryValidStatusCode() throws IOException
     {
         // arrange
-        initMockTeamCityClient(true);
+        initMockTeamCityClient();
         AdvancedHttpResponse response = mock(AdvancedHttpResponse.class);
         when(response.getStatus()).thenReturn(200);
         httpClient.setResponse(response);
@@ -102,7 +114,7 @@ public class TeamCityClientTest
     public void testIndexRepositoryInvalidStatusCode() throws IOException
     {
         // arrange
-        initMockTeamCityClient(true);
+        initMockTeamCityClient();
         AdvancedHttpResponse response = mock(AdvancedHttpResponse.class);
         when(response.getStatus()).thenReturn(401);
         httpClient.setResponse(response);
@@ -110,6 +122,34 @@ public class TeamCityClientTest
         // assert failed status code
         boolean result = teamCityClient.triggerCheckForChanges("TestVCS");
         assertFalse(result);
+    }
+
+    @Test
+    public void testUpdateConfigFromRepositoryOverwritesGlobalConfig() throws IOException
+    {
+        // arrange
+        String username = "test-username";
+        String password = "test-password";
+        String url = "http://custom-url.example.com:9000/context-path";
+        TeamCityConfiguration repoConfiguration = new TeamCityConfiguration(url, "Test", username, password);
+
+        TeamCityGlobalConfiguration globalConfiguration = new TeamCityGlobalConfiguration();
+        globalConfiguration.setUrl("http://global-url.example.com");
+        globalConfiguration.setUsername("username");
+        globalConfiguration.setPassword("password");
+
+        initMockTeamCityClient(repoConfiguration, globalConfiguration);
+
+        expectedRequest = new TestAdvancedHttpRequest(httpClient, null, url);
+        expectedRequest.basicAuth(username, password);
+
+        AdvancedHttpResponse response = mock(AdvancedHttpResponse.class);
+        when(response.getStatus()).thenReturn(401);
+        httpClient.setResponse(response);
+
+        // act + assert
+        teamCityClient.triggerCheckForChanges("Test");
+        assertTrue(areEqual(expectedRequest, httpClient.getRequest()));
     }
 
     private boolean areEqual(BaseHttpRequest<?> a, BaseHttpRequest<?> b)

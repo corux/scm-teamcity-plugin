@@ -7,12 +7,14 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.corux.scm.plugins.teamcity.TeamCityConfiguration;
 import de.corux.scm.plugins.teamcity.TeamCityContext;
 import de.corux.scm.plugins.teamcity.TeamCityGlobalConfiguration;
 import sonia.scm.net.ahc.AdvancedHttpClient;
 import sonia.scm.net.ahc.AdvancedHttpRequestWithBody;
 import sonia.scm.net.ahc.AdvancedHttpResponse;
 import sonia.scm.util.UrlBuilder;
+import sonia.scm.util.Util;
 
 /**
  * Simple client for the TeamCity REST API.
@@ -21,15 +23,12 @@ import sonia.scm.util.UrlBuilder;
  */
 public class TeamCityClient
 {
-    private final String baseUrl;
+    private static final Logger logger = LoggerFactory.getLogger(TeamCityClient.class);
+
+    private final AdvancedHttpClient client;
+    private String baseUrl;
     private String username;
     private String password;
-    private final AdvancedHttpClient client;
-
-    /**
-     * The logger for {@link TeamCityClient}.
-     */
-    private static final Logger logger = LoggerFactory.getLogger(TeamCityClient.class);
 
     @Inject
     public TeamCityClient(final TeamCityContext context, final AdvancedHttpClient client)
@@ -37,20 +36,24 @@ public class TeamCityClient
         TeamCityGlobalConfiguration configuration = context.getGlobalConfiguration();
         this.client = client;
         this.baseUrl = configuration.getUrl();
+        this.username = configuration.getUsername();
+        this.password = configuration.getPassword();
     }
 
     /**
-     * Sets the REST API credentials.
+     * Updates the clients configuration from the repository configuration.
      *
-     * @param username
-     *            the username
-     * @param password
-     *            the password
+     * @param configuration
+     *            the repository configuration
      */
-    public void setCredentials(final String username, final String password)
+    public void updateConfigFromRepository(final TeamCityConfiguration configuration)
     {
-        this.username = username;
-        this.password = password;
+        if (Util.isNotEmpty(configuration.getUrl()))
+        {
+            this.baseUrl = configuration.getUrl();
+            this.username = configuration.getUsername();
+            this.password = configuration.getPassword();
+        }
     }
 
     /**

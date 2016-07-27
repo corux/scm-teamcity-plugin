@@ -3,10 +3,16 @@ Ext.ns('corux.teamcity');
 corux.teamcity.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
   formTitleText : 'TeamCity',
   urlText : 'Url',
-  vcsRootText : 'VCS Root',
+  urlHelpText : 'Url of teamcity installation (e.g. http://teamcity.example.com/).',
 
-  urlHelpText : 'Url of teamcity installation (e.g. https://teamcity.yourserver.local/).',
+  vcsRootText : 'VCS Root',
   vcsRootHelpText : 'ID of the TeamCity VCS root.',
+
+  usernameText : 'Username',
+  usernameHelpText : 'Username for TeamCity.',
+
+  passwordText : 'Password',
+  passwordHelpText : 'Password for TeamCity.',
 
   initComponent : function() {
     var config = {
@@ -18,10 +24,21 @@ corux.teamcity.ConfigPanel = Ext.extend(Sonia.repository.PropertiesFormPanel, {
         vtype : 'url',
         helpText : this.urlHelpText
       }, {
+        name: 'teamcityUsername',
+        fieldLabel : this.usernameText,
+        property : 'teamcity.username',
+        helpText : this.usernameHelpText
+      }, {
+        name: 'teamcityPassword',
+        inputType: 'password',
+        fieldLabel : this.passwordText,
+        property : 'teamcity.password',
+        helpText : this.passwordHelpText
+      }, {
         name : 'teamcityVcsRoot',
-        fieldLabel : this.VcsRootText,
+        fieldLabel : this.vcsRootText,
         property : 'teamcity.vcsroot',
-        helpText : this.VcsRootHelpText
+        helpText : this.vcsRootHelpText
       } ]
     };
 

@@ -17,16 +17,26 @@ public class TeamCityConfiguration implements Validateable
     /** Repository property for the TeamCity server url */
     public static final String PROPERTY_TEAMCITY_URL = "teamcity.url";
 
-    /**
-     * Repository property for the TeamCity VCS root.
-     */
+    /** Repository property for the TeamCity VCS root. */
     public static final String PROPERTY_TEAMCITY_VCS_ROOT = "teamcity.vcsroot";
+
+    /** Repository property for the TeamCity username. */
+    public static final String PROPERTY_TEAMCITY_USERNAME = "teamcity.username";
+
+    /** Repository property for the TeamCity password. */
+    public static final String PROPERTY_TEAMCITY_PASSWORD = "teamcity.password";
 
     /** The TeamCity url. */
     private String url;
 
     /** The VCS root. */
     private String vcsRoot;
+
+    /** The username. */
+    private String username;
+
+    /** The password. */
+    private String password;
 
     private Repository repository;
 
@@ -37,11 +47,17 @@ public class TeamCityConfiguration implements Validateable
      *            the url
      * @param vcsRoot
      *            the VCS root
+     * @param username
+     *            the username
+     * @param password
+     *            the password
      */
-    public TeamCityConfiguration(final String url, final String vcsRoot)
+    public TeamCityConfiguration(final String url, final String vcsRoot, final String username, final String password)
     {
         this.url = url;
         this.vcsRoot = vcsRoot;
+        this.username = username;
+        this.password = password;
     }
 
     /**
@@ -57,6 +73,19 @@ public class TeamCityConfiguration implements Validateable
         this.repository = repository;
         this.url = repository.getProperty(PROPERTY_TEAMCITY_URL);
         this.vcsRoot = repository.getProperty(PROPERTY_TEAMCITY_VCS_ROOT);
+        this.username = repository.getProperty(PROPERTY_TEAMCITY_USERNAME);
+        this.password = repository.getProperty(PROPERTY_TEAMCITY_PASSWORD);
+    }
+
+    /**
+     * Return <code>true</code>, if the configuration is valid.
+     *
+     * @return <code>true</code>, if the configuration is valid
+     */
+    @Override
+    public boolean isValid()
+    {
+        return Util.isNotEmpty(vcsRoot);
     }
 
     /**
@@ -126,13 +155,46 @@ public class TeamCityConfiguration implements Validateable
     }
 
     /**
-     * Return true, if the configuration is valid.
+     * Gets the username.
      *
-     * @return true, if the configuration is valid
+     * @return the username
      */
-    @Override
-    public boolean isValid()
+    public String getUsername()
     {
-        return Util.isNotEmpty(url) && Util.isNotEmpty(vcsRoot);
+        return username;
+    }
+
+    /**
+     * Sets the username.
+     *
+     * @param username
+     *            the new username
+     */
+    public void setUsername(String username)
+    {
+        this.username = username;
+        repository.setProperty(PROPERTY_TEAMCITY_USERNAME, username);
+    }
+
+    /**
+     * Gets the password.
+     *
+     * @return the password
+     */
+    public String getPassword()
+    {
+        return password;
+    }
+
+    /**
+     * Sets the password.
+     *
+     * @param password
+     *            the new password
+     */
+    public void setPassword(String password)
+    {
+        this.password = password;
+        repository.setProperty(PROPERTY_TEAMCITY_PASSWORD, password);
     }
 }
