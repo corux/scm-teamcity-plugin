@@ -1,10 +1,5 @@
 package de.corux.scm.plugins.teamcity;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.apache.commons.lang.StringUtils;
-
 import sonia.scm.Validateable;
 import sonia.scm.repository.Repository;
 import sonia.scm.util.Util;
@@ -130,28 +125,6 @@ public class TeamCityConfiguration implements Validateable
     public String getUrl()
     {
         return url;
-    }
-
-    /**
-     * Gets the url parsed as {@link URL}.
-     *
-     * @return the parsed url
-     */
-    public URL getUrlParsed()
-    {
-        if (StringUtils.isEmpty(getUrl()))
-        {
-            return null;
-        }
-
-        try
-        {
-            return new URL(getUrl());
-        }
-        catch (MalformedURLException e)
-        {
-            throw new TeamCityException(e);
-        }
     }
 
     /**

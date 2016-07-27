@@ -1,14 +1,9 @@
 package de.corux.scm.plugins.teamcity;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.apache.commons.lang.StringUtils;
 
 import sonia.scm.Validateable;
 import sonia.scm.util.Util;
@@ -27,42 +22,20 @@ public class TeamCityGlobalConfiguration implements Validateable
     private String username;
     private String password;
 
+    @Override
+    public boolean isValid()
+    {
+        return Util.isNotEmpty(url);
+    }
+
     public String getUrl()
     {
         return url;
     }
 
-    /**
-     * Gets the url parsed as {@link URL}.
-     *
-     * @return the parsed url
-     */
-    public URL getUrlParsed()
-    {
-        if (StringUtils.isEmpty(getUrl()))
-        {
-            return null;
-        }
-
-        try
-        {
-            return new URL(getUrl());
-        }
-        catch (MalformedURLException e)
-        {
-            throw new TeamCityException(e);
-        }
-    }
-
     public void setUrl(final String url)
     {
         this.url = url;
-    }
-
-    @Override
-    public boolean isValid()
-    {
-        return Util.isNotEmpty(url);
     }
 
     public boolean useRepositoryNameAsDefault()

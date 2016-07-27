@@ -72,4 +72,19 @@ public class TeamCityHookTest
         verify(context).getTeamCityVcsRoot(repository);
         verify(teamCityClient, never()).triggerCheckForChanges(anyString());
     }
+
+    @Test
+    public void testOnEventRepositoryLinkedToTeamCity() throws IOException
+    {
+        // arrange
+        String vcsRoot = "Test";
+        when(context.getTeamCityVcsRoot(any(Repository.class))).thenReturn(vcsRoot);
+
+        // act
+        teamCityHook.onEvent(hookEvent);
+
+        // assert
+        verify(context).getTeamCityVcsRoot(repository);
+        verify(teamCityClient).triggerCheckForChanges(vcsRoot);
+    }
 }
