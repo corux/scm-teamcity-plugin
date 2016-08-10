@@ -8,3 +8,9 @@ before_script:
 after_script:
   - mvn jacoco:report
   - ~/jpm/bin/codacy-coverage-reporter -l Java -r target/site/jacoco/jacoco.xml
+
+deploy:
+  provider: script
+  script: mvn deploy --settings settings.xml -DskipTests=true
+  on:
+    tags: true
