@@ -12,7 +12,7 @@
   <groupId>sonia.scm.plugins</groupId>
   <artifactId>scm-teamcity-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <description>This plugin will ping your TeamCity CI server when a new commit is pushed to SCM-Manager.</description>
   <url>https://github.com/corux/scm-teamcity-plugin</url>
@@ -20,7 +20,7 @@
     <connection>scm:git:https://github.com/corux/scm-teamcity-plugin</connection>
     <developerConnection>scm:git:https://github.com/corux/scm-teamcity-plugin</developerConnection>
     <url>https://github.com/corux/scm-teamcity-plugin</url>
-    <tag>1.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
